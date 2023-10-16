@@ -1,6 +1,8 @@
 import express from "express";
 import conectaNaDataBase from "./config/dbConnect.js";
 import routes from "./routes/index.js";
+import manipuladorDeErros from "./middlewares/manipuladorDeErros.js";
+import manipulador404 from "./middlewares/manipulador404.js";
 
 const conexao = await conectaNaDataBase();
 
@@ -15,17 +17,9 @@ conexao.once("open", () => {
 const app = express();
 routes(app);
 
+app.use(manipulador404);
 
-// app.put("/livros/:id", (req, res) => {
-//   const index = buscaLivro(req.params.id);
-//   livros[index].titulo = req.body.titulo;
-//   res.status(200).json(livros);
-// });
-
-// app.delete("/livros/:id", (req, res) => {
-//   const index = buscaLivro(req.params.id);
-//   livros.splice(index, 1);
-//   res.status(200).send("livro removido com sucesso");
-// });
+// eslint-disable-next-line no-unused-vars
+app.use(manipuladorDeErros);
 
 export default app;
